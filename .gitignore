@@ -2,4 +2,5 @@ venv/
 .DS_Store
 .ipynb_checkpoints/
 __pycache__/
-*.pycanaconda_projects/
+*.pyc
+anaconda_projects/
