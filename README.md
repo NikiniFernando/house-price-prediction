@@ -4,11 +4,15 @@
 
 This project uses machine learning to predict residential house prices using the Ames Housing dataset from Kaggle.
 
-The project explores the relationship between housing characteristics and sale prices, followed by the development and comparison of several regression models.
+The project explores the relationships between housing characteristics and sale prices, followed by the development, comparison, and tuning of several regression models.
+
+The main objective is to identify which machine learning approach provides the most accurate house price predictions.
 
 ## Dataset
 
-The dataset contains 1,460 residential properties in Ames, Iowa, with 79 explanatory variables describing features such as:
+The dataset contains 1,460 residential properties in Ames, Iowa, with 79 explanatory variables describing different characteristics of each property.
+
+Examples of features include:
 
 - Overall house quality
 - Living area
@@ -23,73 +27,92 @@ The target variable is `SalePrice`.
 
 ## Project Workflow
 
+The project follows these main steps:
+
 1. Data loading and exploration
 2. Exploratory data analysis
 3. Missing-value analysis
-4. Feature preprocessing
-5. Feature encoding
-6. Train/test split
-7. Linear Regression
-8. Random Forest Regression
-9. XGBoost Regression
-10. Hyperparameter tuning
-11. Model comparison
-12. Feature importance analysis
+4. Identification of numerical and categorical features
+5. Data preprocessing
+6. Categorical feature encoding
+7. Train/test split
+8. Linear Regression
+9. Random Forest Regression
+10. XGBoost Regression
+11. Hyperparameter tuning using RandomizedSearchCV
+12. Model comparison
+13. Feature importance analysis
+14. Actual vs predicted price analysis
 
 ## Exploratory Data Analysis
 
-The analysis found that several variables had strong relationships with house prices.
+Missing values were investigated across the dataset, with several variables containing substantial numbers of missing observations.
+
+The dataset was also examined to identify numerical and categorical features before preprocessing and model development.
+
+Correlation analysis was performed to investigate relationships between numerical variables and `SalePrice`.
 
 The strongest numerical correlations with `SalePrice` included:
 
-- OverallQual
-- GrLivArea
-- GarageCars
-- GarageArea
-- TotalBsmtSF
-- 1stFlrSF
+- `OverallQual`
+- `GrLivArea`
+- `GarageCars`
+- `GarageArea`
+- `TotalBsmtSF`
+- `1stFlrSF`
+- `FullBath`
+- `TotRmsAbvGrd`
+- `YearBuilt`
 
-The relationship between Overall Quality and Sale Price was also visualised.
+A scatter plot was created to visualise the relationship between overall house quality and sale price.
+
+## Visualisations
+
+Several visualisations were created to explore the dataset and evaluate model performance.
+
+### House Quality vs Sale Price
+
+A scatter plot was used to examine the relationship between `OverallQual` and `SalePrice`.
+
+The visualisation shows that houses with higher overall quality generally have higher sale prices.
+
+### Model Performance
+
+Model performance was compared using RMSE and R².
+
+Actual vs predicted plots were also used to examine how closely the model predictions matched the actual sale prices.
+
+Feature importance was analysed for the XGBoost model to identify the variables that contributed most strongly to predictions.
+
+The saved visualisations can be found in the `images/` directory:
+
+- `actual_vs_predicted.png`
+- `feature_importance.png`
+- `model_comparison_rmse.png`
+- `model_performance_comparison.png`
+- `tuned_xgboost_actual_vs_predicted.png`
 
 ## Models
 
-Three machine learning models were evaluated:
+Three regression models were initially evaluated:
 
 | Model | RMSE | R² |
 |---|---:|---:|
 | Linear Regression | 29,395 | 0.887 |
 | Random Forest | 29,003 | 0.890 |
 | XGBoost | 25,713 | 0.914 |
-| Tuned XGBoost | 25,028 | 0.918 |
 
-## Results
+XGBoost produced the best performance among the initial models.
 
-XGBoost performed best among the models tested.
+## Hyperparameter Tuning
 
-After hyperparameter tuning, the XGBoost model achieved:
+The XGBoost model was further optimised using `RandomizedSearchCV`.
 
-- RMSE: 25,028
-- R²: 0.918
+The best parameters identified were:
 
-The results show that gradient boosting was able to capture nonlinear relationships between property characteristics and sale prices more effectively than the baseline linear model.
-
-## Technologies
-
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Scikit-learn
-- XGBoost
-- Jupyter Notebook
-- Kaggle
-
-## Future Improvements
-
-Possible improvements include:
-
-- More extensive feature engineering
-- Cross-validation
-- Additional ensemble models
-- More systematic hyperparameter optimisation
-- Prediction on the Kaggle test dataset
+```text
+subsample = 0.7
+n_estimators = 700
+max_depth = 3
+learning_rate = 0.05
+colsample_by_tree = 1.0
